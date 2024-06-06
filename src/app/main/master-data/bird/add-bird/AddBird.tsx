@@ -193,7 +193,7 @@ export default function AddBird(){
     <Stack direction='row' spacing={2}>
     <TextField size='small' value={bird.code} error={errorConditions.code} label='Code *' onChange={e => setBird(prev => ({...prev, code: e.target.value}))}/>
     <Autocomplete size='small' 
-      value={bird.gender}
+      value={bird.gender} disableClearable
       onChange={(event: any, newValue: { label: string; value: boolean } | null) => {
         setBird(prev => ({
           ...prev,
@@ -225,7 +225,7 @@ export default function AddBird(){
     </Stack>
     <Stack direction='row' spacing={2}>
     {species.length > 0 && <Autocomplete size='small' 
-      value={bird.species}
+      value={bird.species} disableClearable
       onChange={(event: any, newValue: any) => {
         if (newValue !== null) { // Check if newValue is not null
           setBird(prev => ({
@@ -244,7 +244,7 @@ export default function AddBird(){
       sx={{ width: '33%' }} renderInput={(params) => <TextField error={errorConditions.species} {...params} label="Species *" />}
     />}
     {caremodes.length > 0 && <Autocomplete size='small' 
-      value={bird.careMode}
+      value={bird.careMode} disableClearable
       onChange={(event: any, newValue: any) => {
         if (newValue !== null) { // Check if newValue is not null
           setBird(prev => ({
@@ -263,7 +263,7 @@ export default function AddBird(){
       sx={{ width: '33%' }} renderInput={(params) => <TextField error={errorConditions.careMode} {...params} label="Caremode *" />}
     />}
     {categories.length > 0 && <Autocomplete size='small' 
-      value={bird.category}
+      value={bird.category} disableClearable
       onChange={(event: any, newValue: any) => {
         if (newValue !== null) { // Check if newValue is not null
           console.log({ name: newValue.label, id: newValue.value })
@@ -284,7 +284,7 @@ export default function AddBird(){
     />}
     </Stack>
     <Autocomplete size='small' 
-      value={bird.cage}
+      value={bird.cage} disableClearable
       onChange={(event: any, newValue: any) => {
         if (newValue !== null) { // Check if newValue is not null
           setBird(prev => ({
