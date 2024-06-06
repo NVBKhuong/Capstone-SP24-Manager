@@ -48,8 +48,9 @@ function ToolbarLayout1(props: ToolbarLayout1Props) {
 		()=>
 		{
 		farms.forEach(farm => {
-				if(farm.manager.email==user.data.email)
+			if(farm.manager.email==user.data.email){
 				setFarmName(farm.name)
+				localStorage.setItem('farmID', farm.id)}
 		});
 		}
 		,[user,farms]

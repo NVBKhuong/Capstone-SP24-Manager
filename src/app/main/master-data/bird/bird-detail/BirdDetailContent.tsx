@@ -37,7 +37,7 @@ export default function BirdDetailContent({ id }) {
   const dispatch = useAppDispatch()
   const loadData = async () => {
     try {
-      const resBirdDetail = await axios.get<any, Bird>(`/birds/${id}`)
+      const resBirdDetail = await axios.get<any, Bird>(`/birds/${id}`,{params: {farmId:localStorage.getItem('farmID')}})
       const resSpecies = await axios.get('/species')
       const resCaremode = await axios.get('/care-modes')
       const resBirdCategory = await axios.get('/bird-categories')
