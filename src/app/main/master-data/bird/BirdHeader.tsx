@@ -20,16 +20,16 @@ import instance from 'src/app/auth/services/api/customAxios';
     const [cageOptions, setCageOptions] = useState([{label: 'All', value:''}])
     const loadData = async()=>{
         try{
-            const res1 = await instance.get('/cages',{pageSize:100, pageNumber:0})
-            const res2 = await instance.get('/areas',{pageSize:100, pageNumber:0})
+            const res1 = await instance.get('/cages',{pageSize:100, pageNumber:0, farmId: localStorage.getItem('farmID')})
+            // const res2 = await instance.get('/areas',{pageSize:100, pageNumber:0})
             if (res1.data && res2.data) {
                 // Update cageOptions
                 const newCageOptions = res1.data.map(item => ({ label: item.name, value: item.id }));
                 setCageOptions(prevOptions => [...prevOptions, ...newCageOptions]);
     
                 // Update areaOptions
-                const newAreaOptions = res2.data.map(item => ({ label: item.name, value: item.id }));
-                setAreaOptions(prevOptions => [...prevOptions, ...newAreaOptions]);
+                // const newAreaOptions = res2.data.map(item => ({ label: item.name, value: item.id }));
+                // setAreaOptions(prevOptions => [...prevOptions, ...newAreaOptions]);
             }
         }catch(error){console.log(error)}
     }
@@ -44,7 +44,7 @@ import instance from 'src/app/auth/services/api/customAxios';
         <Typography className="text-24 md:text-32 font-extrabold tracking-tight">Birds</Typography>
     </motion.span>
     <div className="flex flex-col w-full sm:w-auto sm:flex-row space-y-16 sm:space-y-0 flex-1 items-center justify-end space-x-8">
-    <Autocomplete size='small' 
+    {/* <Autocomplete size='small' 
              value={areaValue}
         onChange={(event: any, newValue) => {
             dispatch(setArea(newValue))
@@ -52,7 +52,7 @@ import instance from 'src/app/auth/services/api/customAxios';
         options={areaOptions}
         sx={{ width: '15rem' }}
         renderInput={(params) => <TextField  sx={{background:'white'}} {...params} label="Area" />}
-      />
+      /> */}
     <Autocomplete size='small' 
              value={cageValue}
         onChange={(event: any, newValue) => {

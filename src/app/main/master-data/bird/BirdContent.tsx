@@ -20,7 +20,7 @@ const BirdContent = ()=>{
     const cageValue = useAppSelector(state =>  state.birdReducer.birdSlice.cage.value)
     
     useEffect(()=>{
-        dispatch(getBirdData({pageNumber: pageNumber, pageSize: pageSize,cageId: cageValue, farmId: localStorage.getItem('farmID')}))
+        dispatch(getBirdData({pageNumber: pageNumber, pageSize: pageSize,cageId: cageValue}))
     },[pageNumber,pageSize,areaValue,cageValue])
     
     return <motion.div

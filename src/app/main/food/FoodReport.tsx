@@ -1,8 +1,5 @@
 import FuseScrollbars from '@fuse/core/FuseScrollbars';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -10,7 +7,6 @@ import TableCell from '@mui/material/TableCell';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState } from 'react';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { getFoodReportData, setPaginPageNumberReport,setPaginPageSizeReport } from './slice/foodSlice';
 import { useAppDispatch,useAppSelector } from 'app/store';
 
@@ -21,7 +17,9 @@ export default function FoodReport(){
     const pageSize  = useAppSelector((state) => state.foodReducer.foodReducer.foodReports.pagination.pageSize)
     const totalRow =  useAppSelector((state) => state.foodReducer.foodReducer.foodReports.pagination.totalRow)
     useEffect(()=>{
-        dispatch(getFoodReportData({pageNumber: pageNumber, pageSize: pageSize}))
+        dispatch(getFoodReportData({pageNumber: pageNumber, pageSize: pageSize
+            // , farmId: localStorage.getItem('farmID')
+            }))
     },[pageNumber, pageSize])
     
     return <div className="w-full flex flex-col min-h-full bg-white shadow-2">
