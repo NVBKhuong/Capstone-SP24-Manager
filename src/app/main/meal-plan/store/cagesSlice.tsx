@@ -13,7 +13,7 @@ export const getCage = createAppAsyncThunk<any, any>('mealPlanReducer/cages/getC
     return data;
 });
 export const getCages = createAppAsyncThunk<CagesType>('mealPlanReducer/cages/getCages', async () => {
-    const response = await axios.get('/cages');
+    const response = await axios.get('/cages',{params: {farmId: localStorage.getItem('farmID')}});
     const data = (await response.data);
     return data;
 });
