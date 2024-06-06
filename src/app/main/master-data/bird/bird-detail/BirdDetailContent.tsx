@@ -184,7 +184,7 @@ export default function BirdDetailContent({ id }) {
         <TextField fullWidth value={birdDetail.characteristic} label='Characteristic' onChange={e => setBirdDetail(prev => ({ ...prev, characteristic: e.target.value }))} />
         <Stack direction='row' spacing={2}>
           <TextField size='small' value={birdDetail.code} label='Code *' error={errorConditions.code} onChange={e => setBirdDetail(prev => ({ ...prev, code: e.target.value }))} />
-          <Autocomplete size='small'
+          <Autocomplete size='small' disableClearable
             value={{ label: birdDetail.gender === false ? 'Male' : 'Female', value: birdDetail.gender }}
             onChange={(event: any, newValue: { label: string; value: boolean } | null) => {
               setBirdDetail(prev => ({
@@ -216,7 +216,7 @@ export default function BirdDetailContent({ id }) {
           />
         </Stack>
         <Stack direction='row' spacing={2}>
-          {species.length > 0 && <Autocomplete size='small'
+          {species.length > 0 && <Autocomplete size='small' disableClearable
             value={{ label: birdDetail.species.name, value: birdDetail.species.id }}
             onChange={(event: any, newValue: any) => {
               if (newValue !== null) { // Check if newValue is not null
@@ -235,7 +235,7 @@ export default function BirdDetailContent({ id }) {
             options={species}
             sx={{ width: '33%' }} renderInput={(params) => <TextField error={errorConditions.species} {...params} label="Species *" />}
           />}
-          {caremodes.length > 0 && <Autocomplete size='small'
+          {caremodes.length > 0 && <Autocomplete size='small' disableClearable
             value={{ label: birdDetail.careMode.name, value: birdDetail.careMode.id }}
             onChange={(event: any, newValue: any) => {
               if (newValue !== null) { // Check if newValue is not null
@@ -254,7 +254,7 @@ export default function BirdDetailContent({ id }) {
             options={caremodes}
             sx={{ width: '33%' }} renderInput={(params) => <TextField {...params} error={errorConditions.careMode} label="Caremode *" />}
           />}
-          {categories.length > 0 && <Autocomplete size='small'
+          {categories.length > 0 && <Autocomplete size='small' disableClearable
             value={{ label: birdDetail.category.name, value: birdDetail.category.id }}
             onChange={(event: any, newValue: any) => {
               if (newValue !== null) { // Check if newValue is not null
@@ -274,7 +274,7 @@ export default function BirdDetailContent({ id }) {
             sx={{ width: '33%' }} renderInput={(params) => <TextField {...params} error={errorConditions.category} label="Category *" />}
           />}
         </Stack>
-        <Autocomplete size='small'
+        <Autocomplete size='small' disableClearable
           value={{ label: birdDetail.cage.name, value: birdDetail.cage.id }}
           onChange={(event: any, newValue: any) => {
             if (newValue !== null) { // Check if newValue is not null
