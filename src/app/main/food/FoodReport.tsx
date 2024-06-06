@@ -36,6 +36,7 @@ export default function FoodReport(){
     <TableCell align="left"><span className='font-semibold'>Remain quantity</span></TableCell>
     <TableCell align="left"><span className='font-semibold'>Updated by</span></TableCell>
     <TableCell align="left"><span className='font-semibold'>Updated at</span></TableCell>
+    <TableCell align="left" width='30%'><span className='font-semibold'>Note</span></TableCell>
   </TableRow>
 </TableHead>
     {foodReports && foodReports.length > 0 && <TableBody>
@@ -54,6 +55,7 @@ export default function FoodReport(){
           minute: '2-digit',
           hour12: true
         })}</TableCell>
+        <TableCell align='left' width='30%'>{item.description}</TableCell>
     </TableRow>))}
         </TableBody>}
         </Table>
