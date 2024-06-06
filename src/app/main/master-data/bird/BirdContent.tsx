@@ -1,13 +1,8 @@
-import FuseScrollbars from '@fuse/core/FuseScrollbars';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import {useEffect, useState } from 'react';
-import {getBirdData, setPaginPageNumber,setPaginPageSize } from './slice/birdSlice';
+import {getBirdData } from './slice/birdSlice';
 import { useAppDispatch,useAppSelector } from 'app/store';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import BirdCard from './BirdCard'
+import BirdCard from './BirdCard';
+import Stack from '@mui/material/Stack';
 import { motion } from 'framer-motion';
 const container = {
 	show: {
@@ -25,14 +20,14 @@ const BirdContent = ()=>{
     const cageValue = useAppSelector(state =>  state.birdReducer.birdSlice.cage.value)
     
     useEffect(()=>{
-        dispatch(getBirdData({pageNumber: pageNumber, pageSize: pageSize,cageId: cageValue}))
-        // console.log(areaValue, cageValue)
+        dispatch(getBirdData({pageNumber: pageNumber, pageSize: pageSize,cageId: cageValue, farmId: localStorage.getItem('farmID')}))
     },[pageNumber,pageSize,areaValue,cageValue])
     
     return <motion.div
     className="items-center flex grid grid-cols-1  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-32 mt-32 sm:mt-40 ms-32"
     variants={container} initial="hidden" animate="show" >
-    {birds.length > 0 && birds.map(bird => <BirdCard key={bird.id} birdInfo={bird}/>)}
+    {birds.length > 0 ? birds.map(bird => <BirdCard key={bird.id} birdInfo={bird}/>) : <Stack direction='row' justifyContent={'center'}>
+        <h3 className='text-black'>There are no match results</h3></Stack>}
     </motion.div>
 }
 export default BirdContent
