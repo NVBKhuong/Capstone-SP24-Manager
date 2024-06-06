@@ -41,8 +41,7 @@ const birdSlice = createSlice({
 	name: 'birdReducer',
 	initialState: {
 		searchText:'',
-		area: {label: 'All', value:''},
-		cage: {label: 'All', value:''},
+		cage: {label: '', value: null},
         birds: {
 			pagination:{
 				"pageNumber": 0,
@@ -61,7 +60,6 @@ const birdSlice = createSlice({
 		setSearchText: (state,action)=>{
             state.searchText = action.payload as string
         },
-		setArea: (state, action) =>{state.area = action.payload},
 		setCage: (state, action) =>{state.cage = action.payload},
 		setPaginPageNumber: (state, action) => {
 			state.birds.pagination.pageNumber = action.payload as number
@@ -98,7 +96,7 @@ const birdSlice = createSlice({
 	}
 });
 
-export const {setSearchText,setArea, setCage, setBirdId, setMealId, setMealitemsDialog,setPaginPageNumber,setPaginPageSize,setPaginTotalRow} = birdSlice.actions
+export const {setSearchText, setCage, setBirdId, setMealId, setMealitemsDialog,setPaginPageNumber,setPaginPageSize,setPaginTotalRow} = birdSlice.actions
 export const selectMealItemsDialog = (state) => state.birdReducer?.birdSlice.mealItemDialog.isOpen
 export const selectBirdId = (state) => state.birdReducer?.birdSlice.mealItemDialog.birdId
 export const selectMealId = (state) => state.birdReducer?.birdSlice.mealItemDialog.mealId

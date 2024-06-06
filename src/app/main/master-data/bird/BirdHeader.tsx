@@ -8,23 +8,24 @@ import Autocomplete from '@mui/material/Autocomplete';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { useState,useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { setPaginPageNumber, setSearchText, setArea, setCage } from './slice/birdSlice';
+import { setSearchText, setCage } from './slice/birdSlice';
 import { Link } from 'react-router-dom';
 import instance from 'src/app/auth/services/api/customAxios';
  function BirdHeader(){
     const dispatch = useAppDispatch()
     const searchValue  = useAppSelector((state) => state.birdReducer.birdSlice.searchText)
-    const areaValue = useAppSelector(state =>  state.birdReducer.birdSlice.area)
     const cageValue = useAppSelector(state =>  state.birdReducer.birdSlice.cage)
-    const [areaOptions, setAreaOptions] = useState([{label: 'All', value:''}])
-    const [cageOptions, setCageOptions] = useState([{label: 'All', value:''}])
+    // const [areaOptions, setAreaOptions] = useState([{label: 'All', value:''}])
+    const [cageOptions, setCageOptions] = useState([])
     const loadData = async()=>{
         try{
-            const res1 = await instance.get('/cages',{pageSize:100, pageNumber:0, farmId: localStorage.getItem('farmID')})
+            const res1 = await instance.get('/cages',{params:{pageSize:100, pageNumber:0, farmId: localStorage.getItem('farmID')}})
             // const res2 = await instance.get('/areas',{pageSize:100, pageNumber:0})
-            if (res1.data && res2.data) {
+            if (res1.data) {
                 // Update cageOptions
+                console.log(res1.data)
                 const newCageOptions = res1.data.map(item => ({ label: item.name, value: item.id }));
+                dispatch(setCage({label: res1.data[0].name, value: res1.data[0].id}))
                 setCageOptions(prevOptions => [...prevOptions, ...newCageOptions]);
     
                 // Update areaOptions
@@ -59,40 +60,14 @@ import instance from 'src/app/auth/services/api/customAxios';
           dispatch(setCage(newValue));
         }} disableClearable
         options={cageOptions}
-        sx={{ width: '15rem' }}
+        sx={{ width: '20rem' }}
         renderInput={(params) => <TextField  sx={{background:'white'}} {...params} label="Cage" />}
       />
     
-    <Paper
-            component={motion.div}
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
-            className="flex items-center w-full sm:max-w-256 space-x-8 px-16 rounded-full border-1 shadow-0"
-        >
-            <Input
-                placeholder="Search areas"
-                disableUnderline
-                fullWidth
-                value={searchValue}
-                inputProps={{
-                    'aria-label': 'Search'
-                }}
-                onChange={e => dispatch(setSearchText(e.target.value))}
-            />
-
-        </Paper>
         <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
         >
-            <Button
-                variant="contained" className='me-12'
-                color="secondary"
-                startIcon={<FuseSvgIcon>heroicons-outline:search</FuseSvgIcon>}
-                //onClick={()=>{handleSearch();setSearchValue('')}}
-            >
-                Search
-            </Button>
             <Button to={`/master-data/bird/add-bird`} component={Link} variant="contained" color="secondary"
                 startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}
             >
