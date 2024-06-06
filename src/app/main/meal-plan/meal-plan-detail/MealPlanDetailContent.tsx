@@ -335,7 +335,7 @@ export default function MealPlanDetailContent() {
                     <Box display="flex"  >
 
                         <div className='mt-10 mx-40 flex-1'>
-                            <Typography className="font-oleoScript text-40 justify-center flex">Menu</Typography>
+                            <Typography className="font-oleoScript text-40 justify-center flex">Daily Menu</Typography>
                             <Typography variant='h4' className=" text-20 font-400   "> Menu: {plan?.menu?.name}
                             </Typography>
 

@@ -37,8 +37,8 @@ function ToolbarLayout1(props: ToolbarLayout1Props) {
 	const farms =useSelector(selectFarms)
 	const user =useSelector(selectUser)
 	const [farmName,setFarmName]= useState("")
-	console.log("farms",farms)
-	console.log("users",user)
+	// console.log("farms",farms)
+	// console.log("users",user)
 	const dispatch = useAppDispatch()
 	const toolbarTheme = useSelector(selectToolbarTheme);
 	useEffect(()=>{

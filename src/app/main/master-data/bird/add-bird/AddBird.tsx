@@ -8,7 +8,7 @@ import { useAppDispatch } from "app/store";
 import { addBird } from "../slice/birdSlice";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-
+import instance from "src/app/auth/services/api/customAxios";
 export default function AddBird(){
   const navigate=useNavigate()
   const [species, setSpecies]=useState([])
@@ -117,8 +117,45 @@ export default function AddBird(){
         formData.append('speciesId',bird.species.value)
         formData.append('careModeId',bird.careMode.value)
         formData.append('categoryId',bird.category.value)
-        const res = await dispatch(addBird(formData))
-        if(res){
+        const resBird = await dispatch(addBird(formData))
+        if(resBird){
+          // await instance.post(`/menus`,{name: `${bird.name}'s menu`}).then(
+          //   async(res:any) => {
+          //     const birdFormData = new FormData()
+          //     birdFormData.append('menuId', res.id)
+          //     await instance.put<any,any>(`/birds/${resBird.payload.id}`, birdFormData).then(
+          //       ()=>{
+          //         [
+          //           {
+          //               name: "Morning",
+          //               from: "07:00:00",
+          //               to: "09:00:00"
+          //           },
+          //           {
+          //               name: "Lunch",
+          //               from: "12:0:00",
+          //               to: "14:00:00"
+          //           },
+          //           {
+          //               name: "Afternoon",
+          //               from: "17:00:00",
+          //               to: "19:00:00"
+          //           },
+          //           {
+          //               name: "Evening",
+          //               from: "21:00:00",
+          //               to: "22:00:00"
+          //           }
+          //       ].map(async(item) => await instance.post('/menu-meals',{
+          //         "menuId": res.id,
+          //         "name": item.name,
+          //         "from": item.from,
+          //         "to": item.to
+          //       }))
+          //       }
+          //     ).catch(err => console.log(err))
+          //   }
+          // ).catch(err=>console.log(err))
           setSuccessNotify(true)
           navigate('/master-data/bird')
         }else setFailNotify(true)

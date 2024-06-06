@@ -155,16 +155,7 @@ export default function BirdDetailContent({ id }) {
     loadData()
     birdDetail && loadData2()
   }, [])
-  useEffect(
-    () => {
-      if (birdDetail?.menu.menuMeals.length > 0) {
-        let sorted = [...birdDetail?.menu.menuMeals].sort((a, b) => a.from.localeCompare(b.from));
-        setSortedMenuMeal(sorted);
-      } else
-        setSortedMenuMeal(null);
-    },
-    [birdDetail?.menu.menuMeals]
-  )
+ 
   return <div className="w-full flex flex-col min-h-full bg-white">
     {birdDetail && <Stack direction='row' spacing={4} className='justify-between mx-28 mt-28'>
       <Stack direction='column' spacing={2}>
@@ -303,60 +294,6 @@ export default function BirdDetailContent({ id }) {
           renderInput={(params) => <TextField sx={{ background: 'white' }} {...params} label="Cage *" error={errorConditions.cage} />}
         />
 
-        <Typography className='font-semibold text-16'>Menu</Typography>
-        {(sortedMenuMeal && sortedMenuMeal?.length > 0) ? (
-          sortedMenuMeal.map(
-            (meal, index) => {
-              return (
-                <Accordion
-                  key={index}
-                // expanded={accordionExpend == `${index}`} onChange={handleChange(index)}
-                >
-                  <AccordionSummary>
-                    <Typography>{meal.name} </Typography>
-                  </AccordionSummary>
-                  {meal?.mealItems?.map((item) => {
-                    return (
-                      <AccordionDetails 
-                      key={item.id} 
-                      className="flex items-center justify-between px-8 py-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-colors duration-500 ease-in-out hover:bg-gray-100">
-                  
-                      <div className="inline-flex items-center space-x-4">
-                          <Avatar
-                              src={item?.food?.thumbnailUrl}
-                              className="h-16 w-16 rounded-full shadow-inner"
-                          />
-                          <Typography 
-                              className="text-lg font-medium text-gray-800"
-                          > 
-                              {item?.food.name} 
-                          </Typography>
-                      </div>
-                  
-                      <div className="flex items-center">
-                          <Typography 
-                              className="text-base font-light text-gray-600"
-                          >
-                              {item?.quantity}{" ("}{item?.food.unitOfMeasurement.name}{") "}
-                          </Typography>
-                      </div>
-                       
-                  </AccordionDetails>
-                    )
-                    1
-                  }
-                  )}
-
-                </Accordion>
-              )
-            }
-          )
-
-        ) :
-          <div className="flex justify-center m-20 "
-          >   <Typography> </Typography></div>
-        }
-        <MealItemDialog />
         <Stack direction='row' className='justify-end'>
           <Button variant='contained' color='success' onClick={updateBird}>Edit</Button>
         </Stack>
