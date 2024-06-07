@@ -25,7 +25,7 @@ import instance from 'src/app/auth/services/api/customAxios';
                 // Update cageOptions
                 console.log(res1.data)
                 const newCageOptions = res1.data.map(item => ({ label: item.name, value: item.id }));
-                dispatch(setCage({label: res1.data[0].name, value: res1.data[0].id}))
+                if(cageValue.value === null) dispatch(setCage({label: res1.data[0].name, value: res1.data[0].id}));
                 setCageOptions(prevOptions => [...prevOptions, ...newCageOptions]);
     
                 // Update areaOptions

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { MouseEvent, useCallback, useEffect } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import PlanModel from '../../models/PlanModel';
@@ -83,6 +83,7 @@ function PlanDialog() {
 
 	const { isValid, dirtyFields, errors } = formState;
 
+	const [isClicked, setIsClicked] = useState(false);
 
 	const start = watch('from');
 	const end = watch('to');
@@ -91,6 +92,7 @@ function PlanDialog() {
 	 * Initialize Dialog with Data
 	 */
 	const initDialog = useCallback(() => {
+		setIsClicked(false); // Reset isClicked state when dialog is opened
 		/**
 		 * Dialog type: 'edit'
 		 */
@@ -126,13 +128,13 @@ function PlanDialog() {
 	function closeComposeDialog() {
 		return planDialog.type === 'edit' ? dispatch(closeEditPlanDialog()) : dispatch(closeNewPlanDialog());
 	}
-	
+
 	/**
 	 * Form Submit
 	 */
 	const onSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
 		ev.preventDefault();
-
+		setIsClicked(true)
 		const data = {
 			item: {
 				name: `${cage.name}-${cage.code}`
@@ -219,7 +221,7 @@ function PlanDialog() {
 												label: 'Start',
 												variant: 'outlined',
 												error: !!errors.from,
-												helperText: errors.from?.message, 
+												helperText: errors.from?.message,
 											}
 										}}
 									/>
@@ -238,7 +240,7 @@ function PlanDialog() {
 												label: 'End',
 												variant: 'outlined',
 												error: !!errors.to,
-												helperText: errors.to?.message, 
+												helperText: errors.to?.message,
 											}
 										}}
 										minDate={new Date(start)}
@@ -293,7 +295,7 @@ function PlanDialog() {
 						variant="contained"
 						color="primary"
 						onClick={onSubmit}
-						disabled={_.isEmpty(dirtyFields) || !isValid}
+						disabled={_.isEmpty(dirtyFields) || !isValid || isClicked}
 					>
 						Add
 					</Button>

@@ -225,7 +225,7 @@ export default function MenuSampleCard(props: MenuSampleProp) {
 
                                         <Button
                                             onClick={() => {
-                                                dispatch(addMealId(meal.id))
+                                                dispatch(addMealId(meal))
                                                 dispatch(addMenuId(menuSample.id))
                                                 dispatch(setMealitemsDialog(true))
                                             }}

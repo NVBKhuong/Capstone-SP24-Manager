@@ -32,15 +32,15 @@ type ToolbarLayout1Props = {
  */
 function ToolbarLayout1(props: ToolbarLayout1Props) {
 	const { className } = props;
-	const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType;
-	const navbar = useSelector(selectFuseNavbar);
+	const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType
+	const navbar = useSelector(selectFuseNavbar)
 	const farms =useSelector(selectFarms)
 	const user =useSelector(selectUser)
 	const [farmName,setFarmName]= useState("")
 	// console.log("farms",farms)
 	// console.log("users",user)
 	const dispatch = useAppDispatch()
-	const toolbarTheme = useSelector(selectToolbarTheme);
+	const toolbarTheme = useSelector(selectToolbarTheme)
 	useEffect(()=>{
 		dispatch(getFarms())
 	},[])

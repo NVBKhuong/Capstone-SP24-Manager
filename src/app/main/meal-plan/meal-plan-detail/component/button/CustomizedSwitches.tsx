@@ -47,7 +47,8 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function CustomizedSwitches(props) {
   const { bird } = props
-  const [checked, setChecked] = useState(bird?.recommend ?? true);
+  const [checked, setChecked] = useState(bird?.recommend ?? true)
+  console.log("bird", bird?.recommend)
   const dispatch = useAppDispatch()
   useEffect(
     () => {
@@ -72,7 +73,7 @@ export default function CustomizedSwitches(props) {
       checked: !bird?.recommend
     }
     dispatch(setBirdRecommend(data))
-    console.log("bird", bird?.recommend)
+    // console.log("bird", bird?.recommend)
   };
   return (
     <div className="flex items-center ">

@@ -127,6 +127,14 @@ export const removeMenuMeal = createAppAsyncThunk<any, any>('mealPlanReducer/men
         const data = (await response.data);
         return data;
     });
+export const removeBirdMenu = createAppAsyncThunk<any, any>('mealPlanReducer/menus/removeBirdMenu',
+    async (id) => {
+        const formData = new FormData()
+        formData.append("menuId", null)
+        const response = await axios.put(`/birds/${id}`, formData);
+        const data = (await response.data);
+        return data;
+    });
 //========== PUT API ===================
 export const updateMealItem = createAppAsyncThunk<any, any>('mealPlanReducer/plans/updateMealItem',
     async (item) => {
@@ -184,7 +192,7 @@ const initialState = menusAdapter.getInitialState({
         isOpen: false,
     },
     mealItemDialogState: {
-        mealId: "",
+        mealId: {},
         birdId: "",
         isOpen: false,
         foods: [],
@@ -316,6 +324,8 @@ export const menusSlice = createSlice({
                 if (index !== -1) {
                     meal.mealItems.splice(index, 1)
                 }
+            })
+            .addCase(removeBirdMenu.fulfilled, (state, action) => {
             })
             .addCase(removeMenuMeal.fulfilled, (state, action) => {
                 const index = state.plans?.menu?.menuMeals.findIndex(meal => meal?.id == action.meta.arg)

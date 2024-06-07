@@ -42,17 +42,14 @@ export default function CagesContent() {
 
     useEffect(() => {
         function getFilteredArray() {
+            const orderCages = _.orderBy(cages, 'name', 'asc')
             if (searchText.length === 0 && selectedMaterial === 'all') {
-                return cages;
+                return orderCages;
             }
-
-            return _.filter(cages, (item) => {
+            return _.filter(orderCages, (item) => {
                 if (selectedMaterial !== 'all' && item.material !== selectedMaterial) {
                     return false;
                 }
-
-
-
                 return item.name.toLowerCase().includes(searchText.toLowerCase());
             });
         }
@@ -88,7 +85,7 @@ export default function CagesContent() {
                             <MenuItem value="all">
                                 <em> All </em>
                             </MenuItem>
-                            { materials.filter((material, index, self) =>
+                            {materials.filter((material, index, self) =>
                                 index === self.indexOf(material)
                             ).map((Material) => (
                                 <MenuItem
@@ -115,7 +112,7 @@ export default function CagesContent() {
                         }}
                     />
                 </div>
-{/* 
+                {/* 
                 <FormControlLabel
                     label="On-off"
                     control={

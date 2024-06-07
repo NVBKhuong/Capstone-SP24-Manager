@@ -63,14 +63,18 @@ function SignInPage() {
 
 				// No need to do anything, user data will be set at app/auth/AuthContext
 			})
-			.catch((_errors: { type: 'email' | 'password' | `root.${string}` | 'root'; message: string }[]) => {
-				_errors.forEach((error) => {
-					setError(error.type, {
+			.catch
+			(
+				(error) => {
+					setError('email', {
 						type: 'manual',
-						message: error.message
+						message: 'Invalid email or password',
 					});
-				});
-			});
+					setError('password', {
+						type: 'manual',
+					});
+				}
+			)
 	}
 
 	return (

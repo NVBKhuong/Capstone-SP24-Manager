@@ -18,7 +18,7 @@ import { useAppDispatch } from 'app/store';
 import { useEffect, useState } from 'react';
 import CustomizedSwitches from '../../component/button/CustomizedSwitches';
 import MealItemDialog from '../../dialogs/MealItemDialog';
-import { addMealBirdId, addMealId, createBirdMenu, createBirdMenuMeal, removeBirdItem, setMealitemsDialog, updateBird, updateMealItem } from '../../store/menusSlice';
+import { addMealBirdId, addMealId, createBirdMenu, createBirdMenuMeal, removeBirdItem, removeBirdMenu, setMealitemsDialog, updateBird, updateMealItem } from '../../store/menusSlice';
 import { BirdType } from '../../type/MenuType';
 import _ from 'lodash';
 import { MenuMealType } from '../../../calendar/types/PlanType';
@@ -159,12 +159,27 @@ export default function BirdCard(props: BirdProp) {
             setCreatedMenu(true)
 
         }
+        if (bird?.menu?.menuMeals) {
+            for (let meal of bird.menu.menuMeals)
+                if (meal.mealItems.length > 0)
+                    for (let item of meal.mealItems)
+                        dispatch(removeBirdItem({
+                            itemId: item.id,
+                            mealId: meal.id,
+                            birdId: bird.id
+                        }))
+        }
     }
         , [])
     // bird.menu?.menuMeals.sort((a, b) => ('' + a.from).localeCompare(b.from));
     const handleChange = (panel) => (event, newExpanded) => {
         setAccordionExpend(newExpanded ? panel : false);
-    };
+    }
+    useEffect(() => {
+        return () => {
+
+        };
+    }, [dispatch])
 
     return (
         <Card className="shadow-lg max-w-md mx-auto overflow-hidden bg-white">
@@ -172,17 +187,17 @@ export default function BirdCard(props: BirdProp) {
                 avatar={<Avatar src={bird.thumbnailUrl} alt={bird.name} className="w-12 h-12 " />}
                 title={<Typography className="text-lg font-bold truncate text-indigo-800">{bird.name}</Typography>}
                 className="bg-blue-100 p-4"
-          
+
             />
-             <Divider />
+            <Divider />
             <CardContent className="flex flex-wrap gap-2 p-4 justify-center bg-blue-300">
                 <Chip label={bird?.species.name} className="bg-blue-200 text-indigo-800" variant="outlined" size="small" />
                 <Chip label={bird?.careMode.name} className="bg-green-200 text-green-800" variant="outlined" size="small" />
             </CardContent>
             <Divider />
             <CardActions
-            className='bg-blue-100'
-            disableSpacing >
+                className='bg-blue-100'
+                disableSpacing >
                 <CustomizedSwitches bird={bird} />
                 <ExpandMore
                     expand={expanded}
@@ -270,7 +285,7 @@ export default function BirdCard(props: BirdProp) {
                                     className="mt-3 w-full bg-green-400 text-white py-3 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-500 focus:ring-opacity-50"
                                     onClick={
                                         () => {
-                                            dispatch(addMealId(meal.id))
+                                            dispatch(addMealId(meal))
                                             dispatch(addMealBirdId(bird.id))
                                             dispatch(setMealitemsDialog(true))
                                         }

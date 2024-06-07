@@ -15,7 +15,7 @@ export type PlanType = {
 	// extendedProps?: {
 	// 	desc?: string;
 	// 	label?: string;
-	// };
+	// }
 };
 export type planDetailType = {
 	date: string

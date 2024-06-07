@@ -1,8 +1,9 @@
-import { Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { useEffect, useState } from 'react';
 import { getFoods, selectFoods } from 'src/app/main/meal-plan/meal-plan-detail/store/menusSlice';
 import { createMealItemSample, selectMealId, selectMealItemSampleDiaglogOpen, selectMenuId, selectMenuSampleDiaglogOpen, setMealitemsDialog } from '../store/menuSamplesSlice';
+import { differenceBy, map } from 'lodash';
 
 type MealItemsProp = {
     id: string
@@ -10,25 +11,45 @@ type MealItemsProp = {
 export default function MealItemDialog() {
     // const { id } = props
     const open = useAppSelector(selectMealItemSampleDiaglogOpen)
-    const id = useAppSelector(selectMealId)
+    const meal: any = useAppSelector(selectMealId)
     const menuId = useAppSelector(selectMenuId)
+    const [quantities, setQuantities] = useState({});
     const dispatch = useAppDispatch()
-    const foods = useAppSelector(selectFoods)
+    const data = useAppSelector(selectFoods)
     const [checked, setChecked] = useState([]);
+    const [foods, setFoods] = useState([])
+
+    const handleQuantityChange = (event, id) => {
+        const newQuantity = event.target.value;
+        setQuantities(prevQuantities => ({
+            ...prevQuantities,
+            [id]: newQuantity,
+        }));
+    };
     useEffect(() => {
         dispatch(getFoods())
     }, [])
+    useEffect(() => {
+        if (data) {
+            const fd = _.filter(data, { status: "Available" })
+            const existingFoodIds = map(meal.mealItemSamples, 'food.id');
+            const filteredFoods = differenceBy(fd, existingFoodIds.map(id => ({ id })), 'id');
+            setFoods(filteredFoods)
 
+        }
+    }, [data, meal])
     function handleClose() {
         dispatch(setMealitemsDialog(false))
+        setChecked([])
+        setQuantities([])
     }
     // form handler
     function onSubmit(data) {
         data.forEach((mealItem, index) => {
             const newMealItems = {
-                menuMealSampleId: id,
+                menuMealSampleId: meal.id,
                 foodId: mealItem.id,
-                quantity: 1,
+                quantity: quantities[mealItem.id] > 0 ? quantities[mealItem.id] : 1,
                 order: index
             }
             const mealItemData = {
@@ -76,30 +97,36 @@ export default function MealItemDialog() {
 
                         return (
                             <ListItem
-                                className=' w-512'
+                                className='w-512 flex items-center'
                                 key={food.id}
-                                secondaryAction={
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            src={food?.thumbnailUrl}
-                                        />
-                                    </ListItemAvatar>
-
-                                }
                                 disablePadding
                             >
-                                <ListItemButton role={undefined} onClick={handleToggle(food)} dense>
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            checked={checked.indexOf(food) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': labelId }}
+                                <div className="flex-grow">
+                                    <ListItemButton role={undefined} onClick={handleToggle(food)} dense>
+                                        <ListItemIcon>
+                                            <Checkbox
+                                                edge="start"
+                                                checked={checked.indexOf(food) !== -1}
+                                                tabIndex={-1}
+                                                disableRipple
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText id={labelId} primary={`${food.name} (${food.unitOfMeasurement.name})`} />
+                                        <TextField
+                                            type="number"
+                                            size="small"
+                                            value={quantities[food.id] || 1}
+                                            onClick={(event) => event.stopPropagation()}
+                                            onChange={(event) => handleQuantityChange(event, food.id)}
+                                            inputProps={{ min: 1 }}
+                                            className="ml-2 w-64 p-1 text-sm bg-gray-100 rounded border border-gray-300 focus:border-indigo-500"
                                         />
-                                    </ListItemIcon>
-                                    <ListItemText id={labelId} primary={food.name} />
-                                </ListItemButton>
+                                    </ListItemButton>
+                                </div>
+                                <ListItemAvatar className="m-2">
+                                    <Avatar src={food?.thumbnailUrl} />
+                                </ListItemAvatar>
                             </ListItem>
                         );
                     })}

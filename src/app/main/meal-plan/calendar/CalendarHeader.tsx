@@ -80,14 +80,14 @@ function CalendarHeader(props: CalendarHeaderProps) {
 							</motion.div>
 						</div>
 					</Tooltip>
-					<span
+					{/* <span
 						onClick={() => onToggleLeftSidebar()}
 						aria-label="open left sidebar"
 					>
 						<Button variant='contained'
 							color='primary'
 						>View food norm</Button>
-					</span>
+					</span> */}
 				</div>
 			</div>
 

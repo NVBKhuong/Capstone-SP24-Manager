@@ -41,7 +41,7 @@ export default function BirdDetailContent({ id }) {
       const resSpecies = await axios.get('/species')
       const resCaremode = await axios.get('/care-modes')
       const resBirdCategory = await axios.get('/bird-categories')
-      const resCage = await axios.get('/cages')
+      const resCage = await axios.get('/cages',{params:{farmId: localStorage.getItem('farmID')}})
       setBirdDetail(resBirdDetail)
       if (resSpecies.data) {
         const newList = resSpecies.data.map(item => ({

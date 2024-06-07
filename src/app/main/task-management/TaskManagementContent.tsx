@@ -18,6 +18,7 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { motion } from 'framer-motion';
 import { useAppDispatch,useAppSelector } from 'app/store';
 import { getTaskData,setPaginPageNumber, setPaginPageSize, setTaskDataToEmpty  } from './slice/taskManagementSlice';
+import jwtDecode from 'jwt-decode';
 const container = {
 	show: {
 		transition: {
@@ -36,9 +37,10 @@ const TaskManagementContent = ()=>{
   const [showEdit, setShowEdit] =useState(false)
   const [showView, setShowView] =useState(false)
   const [editValue, setEditValue] =useState({})
+  const managerId = jwtDecode(localStorage.getItem('jwt_access_token')).id
   useEffect(()=>{
       dispatch(setTaskDataToEmpty())
-      dispatch(getTaskData({status: 'To do', pageNumber: pageNumber, pageSize: pageSize}))
+      dispatch(getTaskData({managerId: managerId, status: 'To do', pageNumber: pageNumber, pageSize: pageSize}))
   },[pageNumber, pageSize])
     return <div className="w-full flex flex-col min-h-full bg-white">
     <FuseScrollbars className="overflow-x-auto grow">

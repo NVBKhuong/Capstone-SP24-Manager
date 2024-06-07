@@ -99,7 +99,7 @@ const initialState = menuSamplesAdapter.getInitialState({
     },
     menuSamples: [] as menuSampleType[],
     mealItemDialog: {
-        mealId: "",
+        mealId: {},
         menuId: "",
         isOpen: false,
 

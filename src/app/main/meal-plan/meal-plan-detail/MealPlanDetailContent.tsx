@@ -58,12 +58,12 @@ export default function MealPlanDetailContent() {
     const { cageId, planId } = useParams()
     const cage = useAppSelector(selectCage)
     const meals = useAppSelector(selectMeals)
+    console.log("meals",meals)
     const specieses = useAppSelector(selectSpecies)
     const careModes = useAppSelector(selectCareModes)
     const menuSamples = useAppSelector(selectMenuSample)
     const menu: Partial<MenuType> = useAppSelector(selectMenuId)
     const plan: Partial<PlanType> = useAppSelector(selectPlanById)
-    console.log("plan", plan)
     const isExistMealItem = useAppSelector(selectMealItemsDialogProp)
     // useState
     const [sortedMenuMeals, setSortedMenuMeals] = useState([]);
@@ -94,7 +94,11 @@ export default function MealPlanDetailContent() {
             dispatch(getSpecies())
             dispatch(getCareMode())
             dispatch(getPlanById(planId))
-
+            const data = {
+                speciesId: null,
+                careModeId: null
+            }
+            dispatch(getMenuSample(data))
         }
         , [])
 

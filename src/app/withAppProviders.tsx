@@ -35,6 +35,7 @@ function withAppProviders(Component: React.ComponentType<ComponentProps>) {
 		);
 
 		return (
+			
 			<AppContext.Provider value={val}>
 				<LocalizationProvider dateAdapter={AdapterDateFns}>
 					<Provider store={store}>
