@@ -9,14 +9,18 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 import {useEffect, useState } from 'react';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { getFoodData, setPaginPageNumber,setPaginPageSize } from './slice/foodSlice';
 import { useAppDispatch,useAppSelector } from 'app/store';
 import EditModal from './EditModal';
+import ReportModal from './ReportModal';
 
 export default function FoodData(){
     const dispatch=useAppDispatch()
+    const [showReport, setShowReport] =useState(false)
+    const [foodObject, setFoodObject] =useState(null)
     const [editValue, setEditValue] =useState({})
     const [openEditSuccessNotify, setOpenEditSuccessNotify] = useState(false);
     const [openEditFailNotify, setOpenEditFailNotify] = useState(false);
@@ -26,7 +30,7 @@ export default function FoodData(){
     const pageSize  = useAppSelector((state) => state.foodReducer.foodReducer.foods.pagination.pageSize)
     const totalRow =  useAppSelector((state) => state.foodReducer.foodReducer.foods.pagination.totalRow)
     useEffect(()=>{
-        dispatch(getFoodData({pageNumber: pageNumber, pageSize: pageSize}))
+        dispatch(getFoodData({pageNumber: pageNumber, pageSize: pageSize, farmId: localStorage.getItem('farmID')}))
     },[pageNumber, pageSize])
     
     return <div className="w-full flex flex-col min-h-full bg-white shadow-2">
@@ -56,8 +60,14 @@ export default function FoodData(){
         <TableCell align='left'>{new Date(item.createAt).toLocaleDateString('en-Gb')}</TableCell>
         <TableCell align='left' >{item.status === 'Available' ? <Button style={{pointerEvents: "none"}} variant='contained' color='success'>Available</Button> : <Button style={{pointerEvents: "none"}} variant='contained' color='error'>Disable</Button>}</TableCell>
         <TableCell align='left'>
-        <FuseSvgIcon className="text-48" size={24} style={{cursor:'pointer'}} onClick={()=>{setShowEdit(true); setEditValue(item)}} color="action">heroicons-solid:pencil-alt</FuseSvgIcon>
-            
+            <Stack direction='row' spacing={1}>
+                <Tooltip title='Edit'>
+                    <FuseSvgIcon className="text-48" size={24} style={{cursor:'pointer'}} onClick={()=>{setShowEdit(true); setEditValue(item)}} color="action">heroicons-solid:pencil-alt</FuseSvgIcon>
+                </Tooltip>
+                <Tooltip title='View report'>
+                    <FuseSvgIcon className="text-48" size={24} style={{cursor:'pointer'}} onClick={()=>{setShowReport(true); setFoodObject(item)}} color="action">heroicons-solid:document-report</FuseSvgIcon>
+                </Tooltip>
+            </Stack>
         </TableCell>
     </TableRow>))}
         </TableBody>}
@@ -100,5 +110,6 @@ export default function FoodData(){
         </Alert>
       </Snackbar>
     {showEdit && <EditModal setOpenFailSnackbar={setOpenEditFailNotify} setOpenSuccessSnackbar={setOpenEditSuccessNotify} object={editValue} show={showEdit} handleClose={() => setShowEdit(false)} />}
+    {showReport && <ReportModal show={showReport} food={foodObject} handleClose={() => setShowReport(false)} />}
 </div>
 }

@@ -89,11 +89,11 @@ const EditModal = ({show,handleClose, object, setOpenSuccessSnackbar, setOpenFai
     useEffect(() => {
       loadCombobox();
     }, []);
-    return <Dialog fullWidth
+    return <Dialog classes={{
+      paper: 'max-w-lg w-full m-8 sm:m-24'
+  }}
     open={show}
     onClose={handleClose}
-    aria-labelledby="alert-dialog-title"
-    aria-describedby="alert-dialog-description"
   >
     <DialogTitle id="alert-dialog-title">
       Edit

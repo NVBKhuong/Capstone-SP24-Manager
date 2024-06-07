@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { useAppDispatch,useAppSelector } from 'app/store';
 import axios from 'src/app/auth/services/api/customAxios';
 import { Link } from 'react-router-dom';
+import FuseLoading from '@fuse/core/FuseLoading';
 
 const container = {
 	show: {
@@ -30,10 +31,19 @@ const TaskOverviewContent = ()=>{
   useEffect(()=>{
     loadStaffs()
   },[])
-    return <motion.div
+  
+  if (staffs.length===0) {
+    return (
+        <div className="flex w-full  items-center justify-center h-full">
+            <FuseLoading />
+        </div>
+    )
+  }
+  
+  return <motion.div
     className="items-center flex grid grid-cols-1  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-32 mt-32 sm:mt-40 ms-32"
     variants={container} initial="hidden" animate="show" >
-    {staffs.length>0 && staffs.map(staff => <Card key={staff.id} style={{ textDecoration: 'none', color: 'inherit' }} component={Link} to={`/task-overview/user/${staff.id}`} >
+    {staffs.length > 0 && staffs.map(staff => <Card key={staff.id} style={{ textDecoration: 'none', color: 'inherit' }} component={Link} to={`/task-overview/user/${staff.id}`} >
       <CardHeader
         avatar={<Avatar alt="Avatar" src={staff.avatarUrl}/>} sx={{ maxWidth: 'fit-content' }}
         title={staff.name} />

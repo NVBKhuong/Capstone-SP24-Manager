@@ -17,10 +17,10 @@ const FoodHeader = ()=>{
     const pageSize  = useAppSelector((state) => state.foodReducer.foodReducer.foods.pagination.pageSize)
     const handleSearch=async()=>{
         if(tabValue === "1"){
-            await dispatch(getFoodData({name: searchValue, pageNumber: pageNumber, pageSize: pageSize}))
+            await dispatch(getFoodData({name: searchValue, pageNumber: pageNumber, pageSize: pageSize, farmId: localStorage.getItem('farmID')}))
             setSearchValue('')
         }else{
-            await dispatch(getFoodReportData({name: searchValue, pageNumber: pageNumberReport, pageSize: pageSizeReport}))
+            await dispatch(getFoodReportData({name: searchValue, pageNumber: pageNumberReport, pageSize: pageSizeReport, farmId: localStorage.getItem('farmID')}))
             setSearchValue('')
         }
     }
@@ -31,7 +31,7 @@ const FoodHeader = ()=>{
         onChange={(e, newValue) => {dispatch(setTabState(newValue))}}
         >
           <Tab label="Food data" value="1"/>
-          <Tab label="Food report" value="2"/>
+          {/* <Tab label="Food report" value="2"/> */}
         </TabList >
         <Stack direction='row' spacing={2}>
         <TextField  placeholder="Enter food name" label='Search foods' size="small"

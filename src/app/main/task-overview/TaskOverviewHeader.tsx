@@ -19,13 +19,6 @@ const TaskManagementHeader = ()=>{
     >
         <Typography className="text-24 md:text-32 font-extrabold tracking-tight">Task overview</Typography>
     </motion.span>
-    <motion.div  initial={{ opacity: 0, x: 20 }}  animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}>
-        <Stack direction="row" spacing={2}>
-            <Button variant="contained" color="secondary" startIcon={<FuseSvgIcon>heroicons-outline:search</FuseSvgIcon>}
-            >Search</Button>
-
-        </Stack>
-        </motion.div>
 </div>
 }
 export default TaskManagementHeader   
