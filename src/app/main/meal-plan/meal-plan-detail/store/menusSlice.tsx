@@ -36,7 +36,12 @@ export const getMenuSample = createAppAsyncThunk<any, any>('mealPlanReducer/menu
     return data;
 });
 export const getFoods = createAppAsyncThunk('mealPlanReducer/menus/getFoods', async () => {
-    const response = await axios.get('/foods');
+    const response = await axios.get(`/foods?farmId=${localStorage.getItem('farmID')}&pageSize=999`);
+    const data = (await response.data);
+    return data;
+});
+export const getFoodCats = createAppAsyncThunk('mealPlanReducer/menus/getFoodCats', async () => {
+    const response = await axios.get(`/food-categories?pageSize=999`);
     const data = (await response.data);
     return data;
 });
@@ -186,6 +191,7 @@ const initialState = menusAdapter.getInitialState({
     species: [],
     careMode: [],
     menuSample: [],
+    foodCats:[],
     farms: [],
     mealDialog: {
         data: [],
@@ -259,6 +265,9 @@ export const menusSlice = createSlice({
             //=================== GET Reducer ========================
             .addCase(getSpecies.fulfilled, (state, action) => {
                 state.species = action.payload.data
+            })
+            .addCase(getFoodCats.fulfilled, (state, action) => {
+                state.foodCats = action.payload.data
             })
             .addCase(getCareMode.fulfilled, (state, action) => {
                 state.careMode = action.payload.data
@@ -373,6 +382,7 @@ export const { setBirdRecommend, addMealBirdId, resetPlan, addMealId, setDialogS
 
 export const selectCageSearchText = (state: AppRootStateType) => state.mealPlanReducer?.menus
 export const selectBirds = (state: AppRootStateType) => state.mealPlanReducer.menus.birds
+export const selectFoodCats = (state: AppRootStateType) => state.mealPlanReducer.menus.foodCats
 export const selectSpecies = (state) => state.mealPlanReducer?.menus.species;
 export const selectCareModes = (state) => state.mealPlanReducer?.menus.careMode;
 export const selectMeals = (state: AppRootStateType) => state.mealPlanReducer?.menus.mealDialog.data

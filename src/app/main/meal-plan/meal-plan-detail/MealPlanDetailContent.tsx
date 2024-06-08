@@ -58,7 +58,6 @@ export default function MealPlanDetailContent() {
     const { cageId, planId } = useParams()
     const cage = useAppSelector(selectCage)
     const meals = useAppSelector(selectMeals)
-    console.log("meals",meals)
     const specieses = useAppSelector(selectSpecies)
     const careModes = useAppSelector(selectCareModes)
     const menuSamples = useAppSelector(selectMenuSample)
@@ -113,7 +112,7 @@ export default function MealPlanDetailContent() {
                 menuName: plan.menu.name,
             }
             reset(data)
-       
+
         } else
             return;
     }
@@ -342,6 +341,7 @@ export default function MealPlanDetailContent() {
                             <Typography className="font-oleoScript text-40 justify-center flex">Daily Menu</Typography>
                             <Typography variant='h4' className=" text-20 font-400   "> Menu: {plan?.menu?.name}
                             </Typography>
+                            <MealItemDialog />
 
                             {(sortedMenuMeal && sortedMenuMeal?.length > 0) ? (
                                 sortedMenuMeal.map((meal) => {
@@ -366,7 +366,6 @@ export default function MealPlanDetailContent() {
                                                     </Typography>
                                                 </AccordionDetails>
                                             ))}
-                                            <MealItemDialog />
                                         </Accordion>
                                     );
                                 })

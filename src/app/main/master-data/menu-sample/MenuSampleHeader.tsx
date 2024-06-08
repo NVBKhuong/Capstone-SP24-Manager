@@ -1,11 +1,16 @@
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon'
-import { Button, Input, Paper, Typography } from '@mui/material'
-import { useAppDispatch } from 'app/store'
+import { Autocomplete, Button, Input, Paper, TextField, Typography } from '@mui/material'
+import { useAppDispatch, useAppSelector } from 'app/store'
 import { motion } from 'framer-motion'
-import { setMenuSampleDialog } from './store/menuSamplesSlice'
+import { setFilterCareMode, setFilterSpecies, setFilterTypeOfMenu, setMenuSampleDialog } from './store/menuSamplesSlice'
+import { NameType } from '../../meal-plan/meal-plan-detail/type/MenuType'
+import { selectCareModes, selectSpecies } from '../../meal-plan/meal-plan-detail/store/menusSlice'
 
 export default function MenuSampleHeader() {
     const dispatch = useAppDispatch()
+    const species = useAppSelector(selectSpecies)
+    const caremodes = useAppSelector(selectCareModes)
+  
     return (
         <div style={{ background: 'rgb(241, 245, 249)' }} className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-32 px-24 md:px-32">
             <motion.span
@@ -14,37 +19,86 @@ export default function MenuSampleHeader() {
             >
                 <Typography className="text-24 md:text-32 font-extrabold tracking-tight">Menu sample</Typography>
             </motion.span>
-            <div className="flex flex-col w-full sm:w-auto sm:flex-row space-y-16 sm:space-y-0 flex-1 items-center justify-end space-x-8">
-                <Paper
-                    component={motion.div}
+            <div className="flex  flex-col w-full sm:w-auto sm:flex-row space-y-16 sm:space-y-0 flex-1 items-center justify-end space-x-8">
+                <motion.div
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
-                    className="flex items-center w-full sm:max-w-256 space-x-8 px-16 rounded-full border-1 shadow-0"
+                    className="flex  items-center w-full  space-x-8 px-16  "
                 >
-                    <Input
-                        placeholder="Search areas"
-                        disableUnderline
+                    <Autocomplete
+                        className="w-200"
+                        options={species}
                         fullWidth
-                        //value={searchValue} onKeyPress={e => {if(e.key==='Enter') handleSearch()}}
-                        inputProps={{
-                            'aria-label': 'Search'
-                        }}
-                    //onChange={e => setSearchValue(e.target.value)}
+                        getOptionLabel={(options: NameType) => {
+                            return options?.name || '';
+                        }
+                        }
+                        onChange={(event, newValue) => dispatch(setFilterSpecies(newValue))}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                required
+                                placeholder="Select species "
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        )}
                     />
+                    <Autocomplete
+                        className="w-200"
+                        fullWidth
+                        options={caremodes}
+                        getOptionLabel={(options: NameType) => {
+                            return options?.name || '';
+                        }
+                        }
+                        onChange={(event, newValue) => dispatch(setFilterCareMode(newValue))}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                required
+                                placeholder="Select caremode "
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        )}
+                    />
+                    <Autocomplete
+                        className="w-200"
+                        options={["Low quality","High quality"]}
+                        fullWidth
+                    
+                        onChange={(event, newValue) => dispatch(setFilterTypeOfMenu(newValue))}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                required
+                                placeholder="Select type of menu "
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        )}
+                    />
+        
 
-                </Paper>
+                </motion.div>
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
+                    className="  items-center     "
+
                 >
-                    <Button
-                        variant="contained" className='me-12'
-                        color="secondary"
-                        startIcon={<FuseSvgIcon>heroicons-outline:search</FuseSvgIcon>}
-                    //onClick={()=>{handleSearch();setSearchValue('')}}
-                    >
-                        Search
-                    </Button>
+                    {/* <h3 className=' mb-2' id="demo-simple-select-label">Species</h3> */}
+
                     <Button
                         onClick={() => {
                             dispatch(setMenuSampleDialog(true))

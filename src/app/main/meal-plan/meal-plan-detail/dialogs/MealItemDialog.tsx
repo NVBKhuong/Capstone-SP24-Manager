@@ -1,7 +1,7 @@
-import { Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { useEffect, useState } from 'react';
-import { addMealItems, createMealItems, getFoods, selectFoods, selectMealBirdId, selectMealId, selectMealItemsDialogState, selectMeals, setMealitemsDialog } from '../store/menusSlice';
+import { addMealItems, createMealItems, getFoodCats, getFoods, selectFoodCats, selectFoods, selectMealBirdId, selectMealId, selectMealItemsDialogState, selectMeals, setMealitemsDialog } from '../store/menusSlice';
 import _, { differenceBy, map } from 'lodash';
 
 type MealItemsProp = {
@@ -18,6 +18,9 @@ export default function MealItemDialog() {
     const [checked, setChecked] = useState([])
     const [quantities, setQuantities] = useState({});
     const [foods, setFoods] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const foodCats = useAppSelector(selectFoodCats)
+  
     const handleQuantityChange = (event, id) => {
         const newQuantity = event.target.value;
         setQuantities(prevQuantities => ({
@@ -26,6 +29,7 @@ export default function MealItemDialog() {
         }));
     };
     useEffect(() => {
+        dispatch(getFoodCats())
         dispatch(getFoods())
     }, [])
     useEffect(() => {
@@ -33,15 +37,20 @@ export default function MealItemDialog() {
             const fd = _.filter(data, { status: "Available" })
             const existingFoodIds = map(meal.mealItems, 'food.id');
             const filteredFoods = differenceBy(fd, existingFoodIds.map(id => ({ id })), 'id');
-            setFoods(filteredFoods)
+            const finalFilteredFoods = _.filter(filteredFoods, (food) => {
+                return !selectedCategory || food.foodCategory?.name === selectedCategory?.name;
+            })
+            setFoods(finalFilteredFoods)
 
         }
-    }, [data, meal])
+    }, [data, meal,selectedCategory])
 
     function handleClose() {
         dispatch(setMealitemsDialog(false))
         setChecked([])
         setQuantities([])
+        setSelectedCategory(null)
+
     }
     // form handler
     function onSubmit(data) {
@@ -49,7 +58,7 @@ export default function MealItemDialog() {
             const newMealItems = {
                 menuMealId: meal.id,
                 foodId: mealItem.id,
-                quantity: quantities[mealItem.id] > 0 ? quantities[mealItem.id] : 1,
+                quantity: quantities[mealItem.id] > 0 ? quantities[mealItem.id] : 1,    
                 order: index
             }
             const mealItemData = {
@@ -91,6 +100,28 @@ export default function MealItemDialog() {
 
             </div>
             <DialogContent>
+            <Autocomplete
+                    className="w-200"
+                    options={foodCats}
+                    fullWidth
+                    getOptionLabel={(options) => {
+                        return options?.name || '';
+                    }
+                    }
+                    onChange={(event, newValue) => setSelectedCategory(newValue)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Select food type"
+                            placeholder="Select one "
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                        />
+                    )}
+                />
                 <List sx={{ width: '100%', backgroundColor: 'red', maxWidth: 699, bgcolor: 'background.paper' }}>
                     {foods.map((food) => {
                         const labelId = `checkbox-list-label-${food}`;

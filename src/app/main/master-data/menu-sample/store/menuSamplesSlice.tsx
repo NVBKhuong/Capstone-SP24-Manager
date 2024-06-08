@@ -60,7 +60,7 @@ export const updateMealItem = createAsyncThunk<any, any>('menuSamplesReducer/men
                 const data = (await response.data);
                 return data
             }
-          
+
         }
         if (action == "increase") {
             newItem.quantity += 1
@@ -104,6 +104,11 @@ const initialState = menuSamplesAdapter.getInitialState({
         isOpen: false,
 
     },
+    filterMenuSample: {
+        speciesFilter: null,
+        careModeFilter: null,
+        typeOfMenuFilter: ""
+    }
 });
 
 export const {
@@ -120,6 +125,15 @@ export const menuSamplesSlice = createSlice({
     name: 'menuSamplesReducer/menuSamples',
     initialState,
     reducers: {
+        setFilterCareMode: (state, action) => {
+            state.filterMenuSample.careModeFilter = action.payload
+        },
+        setFilterSpecies: (state, action) => {
+            state.filterMenuSample.speciesFilter = action.payload
+        },
+        setFilterTypeOfMenu: (state, action) => {
+            state.filterMenuSample.typeOfMenuFilter = action.payload
+        },
         setMenuSampleDialog: (state, action) => {
             state.menuSampleDialog.isOpen = action.payload
         },
@@ -186,13 +200,16 @@ export const menuSamplesSlice = createSlice({
     }
 });
 
-export const { addMealId, addMenuId, setMenuSampleDialog, setMealitemsDialog } = menuSamplesSlice.actions
+export const { setFilterCareMode, setFilterSpecies, setFilterTypeOfMenu, addMealId, addMenuId, setMenuSampleDialog, setMealitemsDialog } = menuSamplesSlice.actions
 
 export const selectMenuSampleDiaglogOpen = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.menuSampleDialog.isOpen
 export const selectMenuSamplesList = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.menuSamples
 export const selectMealId = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.mealItemDialog.mealId
 export const selectMenuId = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.mealItemDialog.menuId
 export const selectMealItemSampleDiaglogOpen = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.mealItemDialog.isOpen
+export const selectedFilterCareMode = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.filterMenuSample.careModeFilter
+export const selectedFilterSpecies = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.filterMenuSample.speciesFilter
+export const selectedFilterTypeOfMenu = (state: AppRootStateType) => state.menuSamplesReducer.menuSamples.filterMenuSample.typeOfMenuFilter
 
 export type menuSamplesSliceType = typeof menuSamplesSlice;
 

@@ -12,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import instance from 'src/app/auth/services/api/customAxios';
-import FuseLoading from '@fuse/core/FuseLoading';
 
 const ReportModal = ({show, handleClose, food})=>{
     const [reports, setReports] = useState([])
@@ -29,13 +28,14 @@ const ReportModal = ({show, handleClose, food})=>{
     useEffect(()=>{
         food && loadReport()
     },[])
+
     return <Dialog classes={{
         paper: 'max-w-lg w-full m-8 sm:m-24'
     }} open={show} onClose={handleClose}>
     <DialogTitle>
       Food Report
     </DialogTitle>
-    {reports.length>0 ? <DialogContent>
+        <DialogContent>
         <Stack direction='column' spacing={2}>
             <Stack direction='row' spacing={1}>
                 <Typography className='font-semibold'>Food name:</Typography>
@@ -56,7 +56,7 @@ const ReportModal = ({show, handleClose, food})=>{
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {reports.map((item, index) => <TableRow key={item.id}>
+                    {reports.length>0 ? reports.map((item, index) => <TableRow key={item.id}>
                     <TableCell align='left'>{item.lastQuantity} {item.food.unitOfMeasurement.name}</TableCell>
                     <TableCell align='left'>{item.remainQuantity} {item.food.unitOfMeasurement.name}</TableCell>
                     <TableCell align='left'>{item.staff.name}</TableCell>
@@ -69,11 +69,13 @@ const ReportModal = ({show, handleClose, food})=>{
                     hour12: true
                     })}</TableCell>
                     <TableCell align='left' width='30%'>{item.description}</TableCell>
-                    </TableRow>)}
+                    </TableRow>) : <TableRow>
+                <TableCell colSpan={5} align='center'><h3>This food has no report yet!</h3></TableCell>
+            </TableRow>}
                 </TableBody>
             </Table>
         </Stack>
-    </DialogContent> : <FuseLoading/>}
+    </DialogContent>
     <DialogActions>
       <Button variant='contained' onClick={handleClose}>Cancel</Button>
     </DialogActions>

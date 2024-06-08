@@ -44,7 +44,7 @@ export default function BirdMenus() {
         }
         , []
     )
-  
+
     let morning: MealItemType[] = []
     let lunch: MealItemType[] = []
     let evening: MealItemType[] = []
