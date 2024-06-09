@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Button, Div
 import { DatePicker } from '@mui/x-date-pickers';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { showMessage } from 'app/store/fuse/messageSlice';
-import { format, formatISO, startOfDay } from 'date-fns';
+import { format, formatISO, startOfDay, subDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
@@ -21,10 +21,12 @@ const schema = yup.object().shape({
     start: yup.date().required('Start date is required'),
     end: yup.date().test(
         "is-greater",
-        "End date must be greater than today",
+        "End date must be greater than today one day",
         function (value) {
             const toDate = startOfDay(new Date(value));
-            const today = startOfDay(new Date());
+            const data = startOfDay(new Date());
+            const today = subDays(data, 1);
+
 
             if (value) return (formatISO(toDate, { representation: 'date' }) >= formatISO(today, { representation: 'date' }))
 
@@ -125,7 +127,7 @@ export default function MealPlanDetailContent() {
             if (formatISO(toDate, { representation: 'date' }) < formatISO(today, { representation: 'date' })) {
                 setIsDisabledEnd(true);
             }
-            if (formatISO(frDate, { representation: 'date' }) <= formatISO(today, { representation: 'date' })) {
+            if (formatISO(frDate, { representation: 'date' }) < formatISO(today, { representation: 'date' })) {
                 setIsDisabledStart(true);
             }
 
