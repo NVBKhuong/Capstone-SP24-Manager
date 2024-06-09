@@ -31,7 +31,9 @@ const meals = [
         to: "22:00:00"
     }
 ]
-export default function BirdMenus() {
+export default function BirdMenus(prop) {
+    const { isDisable } = prop
+    console.log("isDisable", isDisable)
     const dispatch = useAppDispatch()
     const plan = useAppSelector(selectPlanById)
     const cageId = plan?.cage?.id;
@@ -189,6 +191,7 @@ export default function BirdMenus() {
                     onClick={handleAplyTomenu}
                     variant='contained'
                     color='secondary'
+                    disabled={isDisable}
                 >
                     Apply to menu
                 </Button>

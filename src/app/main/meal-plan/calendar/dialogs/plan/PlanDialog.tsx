@@ -62,6 +62,7 @@ function PlanDialog() {
 	const dispatch = useAppDispatch();
 	const cage = useAppSelector(selectCage)
 	const plans = useAppSelector(selectPlans)
+	console.log("plans", plans)
 	const schema = yup.object().shape({
 		from: yup.string().required('Please enter start date')
 			.test('overlap', 'Your time overlaps with existing plans', function (value) {

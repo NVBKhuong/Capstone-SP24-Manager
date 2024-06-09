@@ -48,13 +48,7 @@ export default function MenuSampleDialog(props: menuSamplesDialogProps) {
     const { menuSampleList } = props
     // console.log("Check", menuSampleList)
     // get Species && Caremodes list
-    useEffect(
-        () => {
-            dispatch(getSpecies())
-            dispatch(getCareMode())
-        }
-        , []
-    )
+
     function handleClose() {
         dispatch(setMenuSampleDialog(false))
     }

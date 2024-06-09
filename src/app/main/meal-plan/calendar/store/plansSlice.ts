@@ -17,7 +17,7 @@ export const dateFormat = 'YYYY-MM-DDTHH:mm:ss.sssZ';
  * Get Plans from server
  */
 export const getPlans = createAsyncThunk<any,any>('mealPlanReducer/plans/getPlans', async (cageId) => {
-	const response = await axios.get(`/plans?cageId=${cageId}`);
+	const response = await axios.get(`/plans?cageId=${cageId}&pageSize=999`);
 
 	const data = (await response.data)
 	return data;

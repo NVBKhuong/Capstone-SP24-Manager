@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Button, Div
 import { DatePicker } from '@mui/x-date-pickers';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { showMessage } from 'app/store/fuse/messageSlice';
-import { format, formatISO } from 'date-fns';
+import { format, formatISO, startOfDay } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
@@ -21,10 +21,13 @@ const schema = yup.object().shape({
     start: yup.date().required('Start date is required'),
     end: yup.date().test(
         "is-greater",
-        "End date must be greater than start date",
+        "End date must be greater than today",
         function (value) {
-            let { start } = this.parent;
-            if (start && value) return value > start;
+            const toDate = startOfDay(new Date(value));
+            const today = startOfDay(new Date());
+
+            if (value) return (formatISO(toDate, { representation: 'date' }) >= formatISO(today, { representation: 'date' }))
+
             return true; // bypass this test if `start` is undefined
         }
     ).required('End date is required'),
@@ -74,7 +77,9 @@ export default function MealPlanDetailContent() {
     const [isTitleEdited, setIsTitleEdited] = useState(false)
     const [awaiRender, setAwaitrender] = useState(true)
     const [selectedMenuSample, setSelectedMenuSample] = useState<menuSampleType>();
-    const [isButtonApplyDisabled, setIsButtonApplyDisabled] = useState(true);
+    const [isDisabledStart, setIsDisabledStart] = useState(false);
+    const [isDisabledEnd, setIsDisabledEnd] = useState(false);
+
     // const [isTitleEdited, setIsTitleEdited] = useState(false)
     const { control, watch, formState, handleSubmit, getValues, setError, setValue, reset } = useForm(
         {
@@ -83,6 +88,7 @@ export default function MealPlanDetailContent() {
         }
     )
     const start = watch('start');
+    const end = watch('end');
     const { errors } = formState
     const navigate = useNavigate()
     //useEffet
@@ -112,6 +118,17 @@ export default function MealPlanDetailContent() {
                 menuName: plan.menu.name,
             }
             reset(data)
+            const frDate = startOfDay(new Date(plan.from));
+            const toDate = startOfDay(new Date(plan.to));
+            const today = startOfDay(new Date());
+
+            if (formatISO(toDate, { representation: 'date' }) < formatISO(today, { representation: 'date' })) {
+                setIsDisabledEnd(true);
+            }
+            if (formatISO(frDate, { representation: 'date' }) <= formatISO(today, { representation: 'date' })) {
+                setIsDisabledStart(true);
+            }
+
 
         } else
             return;
@@ -235,6 +252,7 @@ export default function MealPlanDetailContent() {
                                     render={({ field }) => (
                                         <DatePicker
                                             {...field}
+                                            disabled={isDisabledStart}
                                             className='my-10'
                                         />
 
@@ -253,6 +271,7 @@ export default function MealPlanDetailContent() {
                                             <DatePicker
                                                 minDate={new Date(start)}
                                                 {...field}
+                                                disabled={isDisabledEnd}
                                                 className='my-10'
                                             />
                                             <Typography color="red">{errors?.end?.message}</Typography>
@@ -300,7 +319,7 @@ export default function MealPlanDetailContent() {
                                 <div
                                     className="flex justify-end">
                                     <Button
-                                        onClick={() => {
+                                        onClick={async () => {
                                             const newPlan = {
                                                 "title": getValues().title,
                                                 "from": format(getValues().start, "yyyy-MM-dd'T'HH:mm:ss"),
@@ -310,11 +329,21 @@ export default function MealPlanDetailContent() {
                                                 itemId: plan.id,
                                                 newItem: newPlan
                                             }
-                                            dispatch(updatePlan(planData))
-                                            const msg = {
-                                                variant: 'success',
-                                                autoHideDuration: 2000,
-                                                message: `Edit plan successfully`,
+                                            const result = await dispatch(updatePlan(planData))
+                                            console.log("result ", result)
+                                            let msg
+                                            if (result.payload) {
+                                                msg = {
+                                                    variant: 'success',
+                                                    autoHideDuration: 2000,
+                                                    message: `Edit plan successfully`,
+                                                }
+                                            } else {
+                                                msg = {
+                                                    variant: 'error',
+                                                    autoHideDuration: 2000,
+                                                    message: `Cannot edit to date has plan`,
+                                                }
                                             }
                                             dispatch(showMessage(msg))
                                         }}
@@ -389,8 +418,7 @@ export default function MealPlanDetailContent() {
                     </Typography>
                     <Typography variant='h4' className=" text-20 font-400 my-20  ">
                     </Typography>
-                    <BirdMenus />
-
+                    <BirdMenus isDisable={isDisabledStart} />
 
 
                 </div>

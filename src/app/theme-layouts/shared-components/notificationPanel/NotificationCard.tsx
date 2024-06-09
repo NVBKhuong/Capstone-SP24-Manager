@@ -41,14 +41,14 @@ function NotificationCard(props: NotificationCardProps) {
 					/>
 				)}
 
-				{item.createAt && (
+				{/* {item.createAt && (
 					<Typography
 						className="mt-8 text-sm leading-none "
 						color="text.secondary"
 					>
 						{formatDistanceToNow(new Date(item.createAt), { addSuffix: true })}
 					</Typography>
-				)}
+				)} */}
 			</div>
 		</Card>
 	);
